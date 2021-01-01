@@ -93,6 +93,8 @@ def organize(apikey, file, directory, output, dryrun=True):
 
 
 def move_file(dryrun, input_file, output_path, output_filename):
+    output_filename = output_filename.replace("\\", "_")
+    output_filename = output_filename.replace("/", "_")
     if dryrun:
         print(f'{input_file} -> {os.path.join(output_path, output_filename)}')
     else:
