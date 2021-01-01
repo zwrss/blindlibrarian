@@ -64,11 +64,10 @@ def organize(apikey, file, directory, output, dryrun=True):
         if movie_info.get('type') == 'episode':
             omdb_info = get_omdb(apikey, movie_title, 'episode', movie_info.get('year'),
                                  season=movie_info.get('season'), episode=movie_info.get('episode'))
-            movie_year = omdb_info.get('Year') or movie_info.get('year') or 'xxxx'
-            output_path = os.path.join(output_path, f'{movie_title} ({movie_year})')
+            output_path = os.path.join(output_path, f'{movie_title}')
             movie_season = movie_info.get('season') or 'XX'
             movie_episode = movie_info.get('episode') or 'XX'
-            output_path = os.path.join(output_path, f'{movie_title} ({movie_year}) Season {movie_season}')
+            output_path = os.path.join(output_path, f'{movie_title} Season {movie_season}')
             movie_episode_title = f'S{movie_season:02d}E{movie_episode:02d}'
             movie_episode_subtitle = omdb_info.get('Title')
             if movie_episode_subtitle:
