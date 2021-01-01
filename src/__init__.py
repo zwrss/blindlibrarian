@@ -1,0 +1,1 @@
+from .blindlibrarian import main
