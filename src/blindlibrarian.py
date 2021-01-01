@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+import glob
 import json
 import os
 import urllib.parse
@@ -51,11 +52,11 @@ def main():
 def organize(apikey, file, directory, output, dryrun=True):
     movie_info = guessit(file)
     ext = os.path.splitext(file)[1]
+    input_file = os.path.join(directory, file)
     if ext in EXT and movie_info.get('title') is not None:
 
         movie_title = movie_info.get('title')
 
-        input_file = os.path.join(directory, file)
         output_path = output
         output_filename = ''
 
@@ -80,11 +81,23 @@ def organize(apikey, file, directory, output, dryrun=True):
             output_path = os.path.join(output_path, f'{movie_title} ({movie_year}) [{movie_language}]')
             output_filename = f'{movie_title} ({movie_year}) [{movie_language}]{ext}'
 
-        if dryrun:
-            print(f'{input_file} -> {os.path.join(output_path, output_filename)}')
-        else:
-            os.makedirs(output_path, exist_ok=True)
-            os.replace(input_file, os.path.join(output_path, output_filename))
+        move_file(dryrun, input_file, output_path, output_filename)
+        
+        # also check for subtitles and other files with matching filenames and move them also
+        moving_prefix = os.path.join(directory, os.path.splitext(file)[0])
+        for matching_file in glob.glob(f'{moving_prefix}.*'):
+            if matching_file != input_file:
+                ext = os.path.splitext(matching_file)[1]
+                output_filename = os.path.splitext(output_filename)[0] + ext
+                move_file(dryrun, matching_file, output_path, output_filename)
+
+
+def move_file(dryrun, input_file, output_path, output_filename):
+    if dryrun:
+        print(f'{input_file} -> {os.path.join(output_path, output_filename)}')
+    else:
+        os.makedirs(output_path, exist_ok=True)
+        os.replace(input_file, os.path.join(output_path, output_filename))
 
 
 def for_each_file(directory, callback):
