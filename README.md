@@ -16,6 +16,10 @@ Options:
   
   
   
-Dockerfile for dockerizing. Dockerized version usage:
+Dockerfile for dockerizing. Build with:
 
-docker run -e 
+docker build -t blindlibrarian .
+
+Dockerized version usage:
+
+docker run [--env dry-run=True] [--env api-key=<omdb-key>] -v <input path>:/var/input -v <output path>:/var/output --name blindlibrarian blindlibrarian
