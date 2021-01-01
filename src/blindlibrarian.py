@@ -3,6 +3,7 @@ from __future__ import print_function
 import glob
 import json
 import os
+import shutil
 import urllib.parse
 
 import requests
@@ -82,7 +83,7 @@ def organize(apikey, file, directory, output, dryrun=True):
             output_filename = f'{movie_title} ({movie_year}) [{movie_language}]{ext}'
 
         move_file(dryrun, input_file, output_path, output_filename)
-        
+
         # also check for subtitles and other files with matching filenames and move them also
         moving_prefix = os.path.join(directory, os.path.splitext(file)[0])
         for matching_file in glob.glob(f'{moving_prefix}.*'):
@@ -97,7 +98,7 @@ def move_file(dryrun, input_file, output_path, output_filename):
         print(f'{input_file} -> {os.path.join(output_path, output_filename)}')
     else:
         os.makedirs(output_path, exist_ok=True)
-        os.replace(input_file, os.path.join(output_path, output_filename))
+        shutil.move(input_file, os.path.join(output_path, output_filename))
 
 
 def for_each_file(directory, callback):
