@@ -68,7 +68,7 @@ def organize(apikey, file, directory, output, dryrun=True):
             movie_season = movie_info.get('season') or 'XX'
             movie_episode = movie_info.get('episode') or 'XX'
             output_path = os.path.join(output_path, f'{movie_title} Season {movie_season}')
-            movie_episode_title = f'S{movie_season:02d}E{movie_episode:02d}'
+            movie_episode_title = f'S{movie_season}E{movie_episode}'
             movie_episode_subtitle = omdb_info.get('Title')
             if movie_episode_subtitle:
                 movie_episode_title = f'{movie_episode_title} - {movie_episode_subtitle}'
@@ -119,8 +119,8 @@ def get_omdb(apikey, title, tpe='movie', year=None, season=None, episode=None):
             params['y'] = year
         if season:
             params['season'] = season
-        if episode:
-            params['episode'] = episode
+            if episode:
+                 params['episode'] = episode
         url = OMDB_URL + urllib.parse.urlencode(params)
         try:
             r = requests.get(url)
